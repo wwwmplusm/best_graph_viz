@@ -6,13 +6,16 @@ export interface PersonRow {
   sex: string
   dob: string
   comment: string
-  parentId: string
+  parentIds: string
+  spouseIds: string
+  ifSubject: number // 1 if subject, 0 if not
 }
 
 interface FamilyStore {
   rows: PersonRow[]
   setRows: (newRows: PersonRow[]) => void
   addRow: () => void
+  setSubject: (id: number) => void
 }
 
 export const useFamilyStore = create<FamilyStore>((set, get) => ({
@@ -23,7 +26,9 @@ export const useFamilyStore = create<FamilyStore>((set, get) => ({
       sex: 'M',
       dob: '1980-05-15',
       comment: 'Father',
-      parentId: ''
+      parentIds: '',
+      spouseIds: '2',
+      ifSubject: 0
     },
     {
       id: 2,
@@ -31,7 +36,19 @@ export const useFamilyStore = create<FamilyStore>((set, get) => ({
       sex: 'F',
       dob: '1985-08-22',
       comment: 'Mother',
-      parentId: ''
+      parentIds: '',
+      spouseIds: '1',
+      ifSubject: 0
+    },
+    {
+      id: 3,
+      name: 'Tommy Smith',
+      sex: 'M',
+      dob: '2010-03-10',
+      comment: 'Son - Research Subject',
+      parentIds: '1,2',
+      spouseIds: '',
+      ifSubject: 1
     }
   ],
   setRows: (newRows) => set({ rows: newRows }),
@@ -47,8 +64,19 @@ export const useFamilyStore = create<FamilyStore>((set, get) => ({
       sex: '',
       dob: '',
       comment: '',
-      parentId: ''
+      parentIds: '',
+      spouseIds: '',
+      ifSubject: 0
     }
     set({ rows: [...rows, newRow] })
+  },
+  setSubject: (id) => {
+    const { rows } = get()
+    // Set all rows to 0, then set the specified ID to 1
+    const updatedRows = rows.map(row => ({
+      ...row,
+      ifSubject: row.id === id ? 1 : 0
+    }))
+    set({ rows: updatedRows })
   }
 })) 

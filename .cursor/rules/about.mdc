@@ -1,0 +1,69 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# .cursorrules for Relationship Visualization App
+# This file guides the Cursor AI to follow project-specific conventions.
+
+# --- Project Overview & High-Level Instructions ---
+project_context:
+  - role: project_goal
+    content: >
+      The goal is to build a local, secure web application for visualizing relationship graphs
+      (family trees, corporate structures). The frontend is React + Cytoscape.js, backend is a
+      lightweight Express server for local file persistence and API proxying.
+      All data remains local. Key features include editing, styling, PNG/PDF export,
+      and future integration with a local LLM and the OpenCorporates API.
+
+  - role: tech_stack
+    content: >
+      - Frontend: React (with Hooks), Vite for setup.
+      - Graph Visualization: Cytoscape.js, specifically using the `react-cytoscapejs` wrapper.
+      - Backend (optional, for persistence): Node.js with Express.
+      - Styling: CSS Modules. Use variables for theming.
+      - Testing: Vitest with React Testing Library.
+      - AI Dev Tool: Cursor IDE.
+
+# --- General Rules for All Code Generation ---
+general_rules:
+  - "Always use functional React components with hooks. Avoid class components."
+  - "Do not generate placeholder text like 'lorem ipsum', '// TODO: Implement', or dummy data. If data is needed, create a small, realistic example relevant to a family tree or business structure."
+  - "Write clean, readable code with descriptive variable and function names (e.g., `fetchCompanyOfficers` instead of `getData`)."
+  - "Generate code in English, but comments can be in Russian if the surrounding code comments are in Russian."
+  - "All asynchronous operations must use async/await syntax."
+  - "The application must function 100% offline, except for the OpenCorporates feature, which should be clearly marked as requiring an internet connection."
+  - "Strictly avoid including any API keys, secrets, or personal data directly in the source code. Use environment variables or a config file (e.g., `config.json`) which is git-ignored."
+
+# --- Rules for JavaScript/React ---
+javascript_rules:
+  - "For state management, prefer React's built-in hooks (`useState`, `useContext`, `useReducer`). Avoid introducing libraries like Redux or MobX for this project's scope."
+  - "When manipulating graph data, treat state as immutable. Always return new arrays or objects instead of modifying them in place."
+  - "Structure the project with clear folders: `src/components`, `src/hooks`, `src/styles`, `src/utils`, `src/api`."
+  - "For Cytoscape.js, node and edge elements must follow the standard format: `{ data: { id: '...', label: '...', ... } }`."
+  - "All event handlers (e.g., `onClick`, `onDoubleClick`) should be defined as separate functions, not inline anonymous functions, for clarity."
+
+# --- Rules for Styling (CSS Modules) ---
+css_rules:
+  - "All text content, especially node labels and UI text, MUST use the 'Lato Light' font. Ensure the font is imported and applied correctly."
+  - "Use CSS Modules for component styling. File names should be `ComponentName.module.css`."
+  - "Define a color palette and font sizes in a central `src/styles/theme.css` file using CSS variables (e.g., `--primary-color`, `--node-label-font-size`) and import it in the main CSS file."
+  - "Node styles (color, shape) should be defined within the Cytoscape stylesheet prop. Use selectors based on data attributes (e.g., `node[type='company']`) to differentiate elements."
+  - "The layout should be responsive, with the Cytoscape canvas filling its container."
+
+# --- Rules for Backend (Express.js) ---
+express_rules:
+  - "When creating the Express server, use `express.json()` middleware to parse request bodies."
+  - "For file persistence, use the `fs/promises` module to read/write JSON files asynchronously."
+  - "Structure API routes using `express.Router()` for modularity (e.g., a separate router for graph data and another for OpenCorporates proxy)."
+  - "Implement basic error handling middleware to catch and respond to server errors gracefully."
+  - "For the OpenCorporates proxy, the API key must be read from an environment variable (`process.env.OPENCORPORATES_API_KEY`), never hardcoded."
+
+# --- Rules for Testing (Vitest) ---
+testing_rules:
+  - "Write tests using Vitest and React Testing Library. Follow the `describe`, `it`, `expect` pattern."
+  - "Tests should be placed in `*.test.jsx` files alongside the components they are testing."
+  - "Use `vi.mock` to mock API calls (`fetch`) and external libraries to ensure tests are fast and isolated. Use mock data that mimics the real API response structure."
+  - "When testing components, query elements by their accessible roles, text, or test IDs (`data-testid`)."
+
+  - "For the TDD workflow, generate a failing test first that clearly describes the desired functionality before generating the implementation."

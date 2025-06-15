@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300&display=swap');
+
+:root {
+  /* Typography */
+  --font-family-primary: 'Lato', sans-serif;
+  --font-weight-light: 300;
+  
+  /* Colors */
+  --color-background: #ffffff;
+  --color-text: #333333;
+  
+  /* Spacing */
+  --spacing-unit: 8px;
+  
+  /* Graph specific */
+  --node-label-font-size: 14px;
+  --edge-label-font-size: 12px;
+} 

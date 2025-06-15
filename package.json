@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "cytoscape": "^3.32.0",
+    "react-cytoscapejs": "^2.0.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.3"
+  },
+  "scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+  "preview": "vite preview",
+  "test": "vitest"
+}
+}

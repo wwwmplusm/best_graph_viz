@@ -6,8 +6,11 @@
   --font-weight-light: 300;
   
   /* Colors */
-  --color-background: #ffffff;
-  --color-text: #333333;
+  --color-background: #F7F7F7;
+  --color-text: #F7F7F7;
+  --node-bg-color: #0A0705;
+  --node-border-color: #C6A363;
+  --edge-color: #C6A363;
   
   /* Spacing */
   --spacing-unit: 8px;

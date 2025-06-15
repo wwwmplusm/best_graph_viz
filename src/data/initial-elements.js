@@ -4,17 +4,17 @@ const initialElements = [
     data: {
       id: 'john',
       label: 'John',
-      type: 'person'
-    },
-    position: { x: 100, y: 100 }
+      type: 'person',
+      dob: '1965-03-12'
+    }
   },
   {
     data: {
       id: 'mary',
       label: 'Mary',
-      type: 'person'
-    },
-    position: { x: 300, y: 100 }
+      type: 'person',
+      dob: '1967-08-22'
+    }
   },
   
   // Tom and his siblings
@@ -22,33 +22,33 @@ const initialElements = [
     data: {
       id: 'tom',
       label: 'Tom',
-      type: 'person'
-    },
-    position: { x: 200, y: 300 }
+      type: 'person',
+      dob: '1992-05-15'
+    }
   },
   {
     data: {
       id: 'mike',
       label: 'Mike',
-      type: 'person'
-    },
-    position: { x: 50, y: 300 }
+      type: 'person',
+      dob: '1988-11-03'
+    }
   },
   {
     data: {
       id: 'david',
       label: 'David',
-      type: 'person'
-    },
-    position: { x: 350, y: 300 }
+      type: 'person',
+      dob: '1990-07-28'
+    }
   },
   {
     data: {
       id: 'sarah',
       label: 'Sarah',
-      type: 'person'
-    },
-    position: { x: 500, y: 300 }
+      type: 'person',
+      dob: '1994-12-10'
+    }
   },
 
   // Tom's spouses
@@ -56,25 +56,25 @@ const initialElements = [
     data: {
       id: 'anna',
       label: 'Anna',
-      type: 'person'
-    },
-    position: { x: 100, y: 450 }
+      type: 'person',
+      dob: '1993-01-20'
+    }
   },
   {
     data: {
       id: 'lisa',
       label: 'Lisa',
-      type: 'person'
-    },
-    position: { x: 200, y: 450 }
+      type: 'person',
+      dob: '1991-09-14'
+    }
   },
   {
     data: {
       id: 'emma',
       label: 'Emma',
-      type: 'person'
-    },
-    position: { x: 300, y: 450 }
+      type: 'person',
+      dob: '1995-04-07'
+    }
   },
 
   // Children from Tom and Anna
@@ -82,25 +82,25 @@ const initialElements = [
     data: {
       id: 'alex',
       label: 'Alex',
-      type: 'person'
-    },
-    position: { x: 50, y: 600 }
+      type: 'person',
+      dob: '2015-06-18'
+    }
   },
   {
     data: {
       id: 'ben',
       label: 'Ben',
-      type: 'person'
-    },
-    position: { x: 100, y: 600 }
+      type: 'person',
+      dob: '2017-02-25'
+    }
   },
   {
     data: {
       id: 'chloe',
       label: 'Chloe',
-      type: 'person'
-    },
-    position: { x: 150, y: 600 }
+      type: 'person',
+      dob: '2019-10-12'
+    }
   },
 
   // Children from Tom and Lisa
@@ -108,25 +108,25 @@ const initialElements = [
     data: {
       id: 'daniel',
       label: 'Daniel',
-      type: 'person'
-    },
-    position: { x: 200, y: 600 }
+      type: 'person',
+      dob: '2016-03-30'
+    }
   },
   {
     data: {
       id: 'eva',
       label: 'Eva',
-      type: 'person'
-    },
-    position: { x: 250, y: 600 }
+      type: 'person',
+      dob: '2018-08-14'
+    }
   },
   {
     data: {
       id: 'frank',
       label: 'Frank',
-      type: 'person'
-    },
-    position: { x: 300, y: 600 }
+      type: 'person',
+      dob: '2020-11-05'
+    }
   },
 
   // Children from Tom and Emma
@@ -134,25 +134,25 @@ const initialElements = [
     data: {
       id: 'grace',
       label: 'Grace',
-      type: 'person'
-    },
-    position: { x: 350, y: 600 }
+      type: 'person',
+      dob: '2017-12-08'
+    }
   },
   {
     data: {
       id: 'henry',
       label: 'Henry',
-      type: 'person'
-    },
-    position: { x: 400, y: 600 }
+      type: 'person',
+      dob: '2019-05-22'
+    }
   },
   {
     data: {
       id: 'ivy',
       label: 'Ivy',
-      type: 'person'
-    },
-    position: { x: 450, y: 600 }
+      type: 'person',
+      dob: '2021-09-16'
+    }
   },
 
   // Parent-child relationships (original)

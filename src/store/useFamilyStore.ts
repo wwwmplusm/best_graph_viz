@@ -45,10 +45,104 @@ export const useFamilyStore = create<FamilyStore>((set, get) => ({
       name: 'Tommy Smith',
       sex: 'M',
       dob: '2010-03-10',
-      comment: 'Son - Research Subject',
+      comment: 'Research Subject',
+      parentIds: '1,2',
+      spouseIds: '7,8,9',
+      ifSubject: 1
+    },
+    // Tommy's Brothers
+    {
+      id: 4,
+      name: 'Michael Smith',
+      sex: 'M',
+      dob: '2008-01-20',
+      comment: 'Elder brother',
       parentIds: '1,2',
       spouseIds: '',
-      ifSubject: 1
+      ifSubject: 0
+    },
+    {
+      id: 5,
+      name: 'David Smith',
+      sex: 'M',
+      dob: '2012-09-14',
+      comment: 'Younger brother',
+      parentIds: '1,2',
+      spouseIds: '',
+      ifSubject: 0
+    },
+    // Tommy's Sister
+    {
+      id: 6,
+      name: 'Sarah Smith',
+      sex: 'F',
+      dob: '2009-07-03',
+      comment: 'Sister',
+      parentIds: '1,2',
+      spouseIds: '',
+      ifSubject: 0
+    },
+    // Tommy's Wives
+    {
+      id: 7,
+      name: 'Emma Johnson',
+      sex: 'F',
+      dob: '2011-04-18',
+      comment: 'First wife',
+      parentIds: '',
+      spouseIds: '3',
+      ifSubject: 0
+    },
+    {
+      id: 8,
+      name: 'Lisa Brown',
+      sex: 'F',
+      dob: '2012-11-25',
+      comment: 'Second wife',
+      parentIds: '',
+      spouseIds: '3',
+      ifSubject: 0
+    },
+    {
+      id: 9,
+      name: 'Maria Garcia',
+      sex: 'F',
+      dob: '2013-08-07',
+      comment: 'Third wife',
+      parentIds: '',
+      spouseIds: '3',
+      ifSubject: 0
+    },
+    // Children from Tommy's marriages
+    {
+      id: 10,
+      name: 'Alex Smith',
+      sex: 'M',
+      dob: '2030-02-12',
+      comment: 'Son with Emma',
+      parentIds: '3,7',
+      spouseIds: '',
+      ifSubject: 0
+    },
+    {
+      id: 11,
+      name: 'Sophie Smith',
+      sex: 'F',
+      dob: '2031-06-30',
+      comment: 'Daughter with Lisa',
+      parentIds: '3,8',
+      spouseIds: '',
+      ifSubject: 0
+    },
+    {
+      id: 12,
+      name: 'Carlos Smith',
+      sex: 'M',
+      dob: '2032-12-08',
+      comment: 'Son with Maria',
+      parentIds: '3,9',
+      spouseIds: '',
+      ifSubject: 0
     }
   ],
   setRows: (newRows) => set({ rows: newRows }),

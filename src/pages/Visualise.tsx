@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { useFamilyStore } from '../store/useFamilyStore'
 import { parseFamilyTree, validateFamilyTree } from '../utils/tableParser'
 import { FamilyRelationships } from '../utils/relationshipCalculator'
-import { treeTheme, getNodeColor, formatDate, getRelationshipToSubject } from '../styles/treeTheme'
+import { treeTheme, getNodeColor, getTextColor, getBorderColor, formatDate, getRelationshipToSubject } from '../styles/treeTheme'
 
 // Register layouts
 cytoscape.use(dagre)
@@ -40,7 +40,7 @@ const Visualise: React.FC = () => {
       if (!person) return node
 
       const relationshipToSubject = subject 
-        ? getRelationshipToSubject(node.data.id, subject.id.toString(), relationships || [])
+        ? getRelationshipToSubject(node.data.id, subject.id.toString(), relationships || [], rows)
         : 'Unknown'
 
       // Create multi-line label with all required information
@@ -49,8 +49,14 @@ const Visualise: React.FC = () => {
       const relationLabel = relationshipToSubject
       const commentLabel = person.comment || ''
 
+      // Show comment unless it's exactly the same as relationship or just says "subject"
+      const shouldShowComment = commentLabel && 
+        commentLabel.toLowerCase() !== relationLabel.toLowerCase() &&
+        !commentLabel.toLowerCase().includes('research subject') &&
+        commentLabel.toLowerCase() !== 'subject'
+
       // Combine all labels with line breaks
-      const fullLabel = [nameLabel, dobLabel, relationLabel, commentLabel]
+      const fullLabel = [nameLabel, dobLabel, relationLabel, shouldShowComment ? commentLabel : '']
         .filter(label => label.trim() !== '')
         .join('\n')
 
@@ -76,14 +82,21 @@ const Visualise: React.FC = () => {
           const isSubject = ele.data('isSubject')
           const nodeId = ele.data('id')
           
-          // Check if this person is a spouse of someone
+          // For now, only the subject gets the dark color, everyone else gets gold
           const person = rows.find(r => r.id.toString() === nodeId)
-          const isSpouse = !!(person?.spouseIds && person.spouseIds.trim() !== '')
+          const isSpouse = false  // Temporarily disable spouse coloring to show gold nodes
           
           return getNodeColor(isSubject, isSpouse)
         },
         'label': 'data(label)',
-        'color': treeTheme.colors.text,
+        'color': (ele: any) => {
+          const isSubject = ele.data('isSubject')
+          const nodeId = ele.data('id')
+          const person = rows.find(r => r.id.toString() === nodeId)
+          const isSpouse = false  // Temporarily disable spouse coloring to show gold nodes
+          
+          return getTextColor(isSubject, isSpouse)
+        },
         'text-valign': 'center',
         'text-halign': 'center',
         'shape': 'round-rectangle',
@@ -95,7 +108,14 @@ const Visualise: React.FC = () => {
         'text-wrap': 'wrap',
         'text-max-width': `${treeTheme.layout.nodeWidth - 20}px`,
         'border-width': treeTheme.layout.borderWidth,
-        'border-color': treeTheme.colors.border,
+        'border-color': (ele: any) => {
+          const isSubject = ele.data('isSubject')
+          const nodeId = ele.data('id')
+          const person = rows.find(r => r.id.toString() === nodeId)
+          const isSpouse = false  // Temporarily disable spouse coloring to show gold nodes
+          
+          return getBorderColor(isSubject, isSpouse)
+        },
         'border-style': 'solid',
         'text-margin-y': 0,
         'text-justification': 'center'
@@ -104,26 +124,24 @@ const Visualise: React.FC = () => {
     {
       selector: 'edge',
       style: {
-        'curve-style': 'straight',           // Let ELK handle orthogonal routing
+        'curve-style': 'bezier',             // Smooth curved edges
         'line-color': treeTheme.colors.edge,
         'width': treeTheme.edges.width,
-        'target-arrow-shape': 'none',        // Clean lines without arrows
+        'target-arrow-shape': 'none',
         'source-arrow-shape': 'none',
         'label': '',
         'edge-text-rotation': 'none',
-        'line-style': 'solid',
-        'line-cap': 'round',                 // Rounded line caps for cleaner appearance
-        'line-join': 'round'                 // Rounded joins for orthogonal connections
+        'line-style': 'solid'
       }
     },
     {
       selector: 'edge[type="parent"]',
       style: {
         'line-color': treeTheme.colors.edge,
-        'curve-style': 'straight',           // ELK will make this orthogonal
+        'curve-style': 'bezier',             // Smooth curved parent-child edges
         'width': 2,
         'line-style': 'solid',
-        'target-arrow-shape': 'triangle-small',  // Small arrow to show parent-child direction
+        'target-arrow-shape': 'triangle-small',
         'target-arrow-color': treeTheme.colors.edge,
         'arrow-scale': 0.8
       }
@@ -131,11 +149,11 @@ const Visualise: React.FC = () => {
     {
       selector: 'edge[type="spouse"]',
       style: {
-        'line-color': treeTheme.colors.spouseNode,
+        'line-color': treeTheme.colors.edge,   // Use black color for spouse edges
         'curve-style': 'straight',           // Keep spouse edges straight
         'width': 3,
         'line-style': 'solid',
-        'target-arrow-shape': 'none',        // No arrows for spouse connections
+        'target-arrow-shape': 'none',
         'source-arrow-shape': 'none'
       }
     }
@@ -163,30 +181,27 @@ const Visualise: React.FC = () => {
     fit: true
   }
 
-  // Dagre layout as fallback (improved)
+  // Dagre layout optimized for orthogonal taxi edges
   const dagreLayout = {
     name: 'dagre',
     rankDir: 'TB',                        // Top to bottom for hierarchical structure
-    nodeSep: treeTheme.layout.nodeSeparation + 20,  // Extra horizontal spacing for orthogonal routing
-    rankSep: 180,                         // Increased vertical spacing for clean orthogonal lines
+    nodeSep: 120,                         // Increased horizontal spacing for taxi routing
+    rankSep: 200,                         // Increased vertical spacing for clean orthogonal lines
     align: 'UL',                          // Align to upper left
     ranker: 'tight-tree',                 // Better tree layout
-    marginx: 60,                          // Increased margins for better orthogonal edge routing
-    marginy: 60,
-    spacingFactor: 1.2,                   // Slightly looser spacing for cleaner orthogonal lines
+    marginx: 80,                          // Extra margins for taxi edge routing space
+    marginy: 80,
+    spacingFactor: 1.5,                   // Looser spacing for better taxi routing
     animate: true,
     animationDuration: 500,
     fit: true,
-    padding: 40,                          // Extra padding for edge routing space
-    edgeSep: 20,                          // Increased edge separation for cleaner orthogonal routing
-    acyclicer: 'greedy',                  // Better handling of cycles for cleaner layout
-    edgeWeight: (edge: any) => {          // Weight edges to prioritize orthogonal routing
-      return edge.data('type') === 'spouse' ? 1 : 2;
-    }
+    padding: 60,                          // Extra padding for taxi edge routing
+    edgeSep: 30,                          // Increased edge separation for taxi routing
+    acyclicer: 'greedy'
   }
 
-  // Choose layout based on state
-  const layout = useElkLayout ? elkLayout : dagreLayout
+  // Use Dagre with taxi edges for better orthogonal routing
+  const layout = dagreLayout
 
   if (!cytoscapeData) {
     return (
@@ -222,7 +237,7 @@ const Visualise: React.FC = () => {
           color="secondary"
           size="small"
         >
-          Layout: {useElkLayout ? 'ELK (Orthogonal)' : 'Dagre'}
+          Edges: Orthogonal (Taxi)
         </Button>
         <Button
           component={Link}
@@ -251,7 +266,7 @@ const Visualise: React.FC = () => {
       <Box sx={{ display: 'flex', gap: 2, height: 'calc(100vh - 120px)' }}>
         {/* Visualization Panel */}
         <Box sx={{ flex: 2 }}>
-          <Paper sx={{ height: '100%', p: 1, bgcolor: 'white' }}>
+          <Paper sx={{ height: '100%', p: 1, bgcolor: treeTheme.colors.background }}>
             <CytoscapeComponent
               elements={[...enhancedNodes, ...cytoscapeData.edges]}
               style={{ width: '100%', height: '100%' }}
@@ -292,7 +307,7 @@ const Visualise: React.FC = () => {
               )}
 
               {/* Legend */}
-              <Box sx={{ mb: 2, p: 2, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+              <Box sx={{ mb: 2, p: 2, bgcolor: '#EFEFEF', borderRadius: 1 }}>
                 <Typography variant="subtitle2" gutterBottom>
                   Color Legend:
                 </Typography>
@@ -349,7 +364,7 @@ const Visualise: React.FC = () => {
                         </AccordionSummary>
                         <AccordionDetails>
                           {filteredRels.map((rel, index) => (
-                            <Box key={index} sx={{ mb: 1, p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                            <Box key={index} sx={{ mb: 1, p: 1, bgcolor: '#EFEFEF', borderRadius: 1 }}>
                               <Typography variant="body2" fontWeight="bold">
                                 {rel.personA} → {rel.personB}
                               </Typography>

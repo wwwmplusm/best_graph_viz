@@ -1,19 +1,22 @@
 import React from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
-import cytoscape from 'cytoscape';
-import dagre from 'cytoscape-dagre';
+import '../cytoscapeConfig'; // registers dagre & elk once
 import initialElements from '../data/initial-elements';
 import styles from './RelationshipGraph.module.css';
 
-// Register the dagre extension
-cytoscape.use(dagre);
-
 const RelationshipGraph = () => {
   const layout = {
-    name: 'dagre',
-    rankDir: 'TB', // Top-to-Bottom hierarchy
-    spacingFactor: 1.5,
-    nodeDimensionsIncludeLabels: true,
+    name: 'elk',
+    elk: {
+      algorithm: 'layered',
+      'elk.direction': 'DOWN',
+      'elk.edgeRouting': 'ORTHOGONAL',
+      'elk.layered.spacing.nodeNodeBetweenLayers': 160,
+      'elk.spacing.nodeNode': 100,
+    },
+    fit: true,
+    animate: true,
+    animationDuration: 500,
   };
 
   const stylesheet = [

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import cytoscape from 'cytoscape';
+import cytoscape from '../cytoscapeConfig'; // centrally configured instance
 
 interface Person {
   id: number;
@@ -83,8 +83,10 @@ const FamilyTreeUI = () => {
         {
           selector: 'edge',
           style: {
-            'curve-style': 'bezier',
-            'target-arrow-shape': 'triangle', // arrowheads
+            'curve-style': 'taxi',
+            'taxi-direction': 'vertical',
+            'taxi-turn-min-distance': 20,
+            'target-arrow-shape': 'triangle',
             'target-arrow-color': '#6b7280',
             'line-color': '#6b7280',
             'width': 2
@@ -92,12 +94,17 @@ const FamilyTreeUI = () => {
         }
       ],
       layout: {
-        name: 'breadthfirst',
-        directed: true, // generations appear in layers
-        padding: 20,
-        spacingFactor: 1.5,
-        avoidOverlap: true
-      }
+        name: 'elk',
+        elk: {
+          algorithm: 'layered',
+          'elk.direction': 'DOWN',
+          'elk.edgeRouting': 'ORTHOGONAL',
+          'elk.layered.spacing.nodeNodeBetweenLayers': 160,
+          'elk.spacing.nodeNode': 100,
+        },
+        animate: true,
+        fit: true,
+      } as any
     });
 
   }, [people]); // Updates on every keystroke via state changes

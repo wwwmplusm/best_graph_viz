@@ -8,6 +8,8 @@
     "cytoscape": "^3.32.0",
     "cytoscape-dagre": "^2.5.0",
     "cytoscape-elk": "^2.3.0",
+    "cytoscape-svg": "^0.4.0",
+    "dagre": "^0.8.5",
     "react-cytoscapejs": "^2.0.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.2",
